@@ -1,0 +1,39 @@
+- name: Loops Demo
+  hosts: servera*
+  gather_facts: false
+  vars_files:
+    - vars/outside_vars.yml
+  # loop introduced in Ansible 2.5
+  tasks:
+    - name: Simple List Loop
+      ansible.builtin.debug:
+        msg: "{{ item }}" 
+      when: item != "pierrick"
+      # with_items: "{{ simple_list }}"
+      loop: "{{ simple_list }}"
+      
+    - name: Complex List Loop
+      ansible.builtin.debug:
+        msg: "{{ item.fn }} // {{ item.ln }}" 
+      # with_list: "{{ complex_list }}"
+      loop: "{{ complex_list }}"
+
+    - name: Simple Dict
+      ansible.builtin.debug:
+        msg: "{{ item['key'] }} == {{ item['value'] }}"
+      loop: "{{ user_dict | dict2items }}"
+      # with_dict: "{{ user_dict }}"
+      #
+    - name: Run few commands
+      ansible.builtin.command: "{{ item }}"
+      loop:
+        - tail -n 2 /etc/passwd
+        - tail -n 4 /etc/group
+        - hostname
+      register: captured
+
+
+    - name: Print Captured output
+      ansible.builtin.debug:
+        msg: "{{ item.stdout_lines}}"
+      loop: "{{ captured.results }}"

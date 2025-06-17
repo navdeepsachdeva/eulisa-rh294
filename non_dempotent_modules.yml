@@ -1,0 +1,12 @@
+- name: Non Idempotent Modules
+  hosts: servera*
+  gather_facts: false
+  tasks:
+    - name: Install Python
+      ansible.builtin.raw: dnf install -y python
+
+    - name: Command Module
+      ansible.builtin.command: tail -n 2 /etc/passwd
+
+    - name: Shell Module
+      ansible.builtin.shell: tail -n 2 /etc/group

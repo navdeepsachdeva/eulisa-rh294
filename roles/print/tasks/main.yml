@@ -1,0 +1,6 @@
+---
+# tasks file for roles/print
+
+- name: Print the Variable Level
+  ansible.builtin.debug:
+    msg: "{{ print_floor_level }}"

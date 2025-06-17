@@ -1,0 +1,40 @@
+- name: Multiple Lines
+  hosts:
+    - servera*
+    - serverb*
+    - serverc*
+  # hosts: servera*,serverb*,serverc*
+  gather_facts: false
+  tasks:
+    - name: Content in File 1
+      ansible.builtin.copy:
+        dest: /tmp/f1
+        mode: 0644
+        content: Executes a low-down and dirty SSH command, not going through the module subsystem. This is useful and should only be done in a few cases.
+    - name: Content in File 2
+      ansible.builtin.copy:
+        dest: /tmp/f2
+        mode: 0644
+        content: >
+                  Executes a low-down and dirty SSH command,
+                  not going through the module subsystem.
+                  This is useful and should only
+                  be done in a few cases.
+    - name: Content in File 3
+      ansible.builtin.copy:
+        dest: /tmp/f3
+        mode: 0644
+        content: >-
+                  Executes a low-down and dirty SSH command,
+                  not going through the module subsystem.
+                  This is useful and should only
+                  be done in a few cases.
+    - name: Content in File 3
+      ansible.builtin.copy:
+        dest: /tmp/f4
+        mode: 0644
+        content: |
+                  Executes a low-down and dirty SSH command,
+                  not going through the module subsystem.
+                  This is useful and should only
+                  be done in a few cases.

@@ -1,0 +1,40 @@
+- name: Dependency Task With Handlers Demo
+  hosts: servera*
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Install Web Package
+      ansible.builtin.dnf:
+        name: httpd
+        state: present
+      notify:
+        - Start Web Service
+        - Package Installed
+
+    - name: Deploy Web app
+      ansible.builtin.copy:
+        content: "EU LISA Index"
+        dest: /var/www/html/index.html
+        mode: 0644
+      notify:
+        - Start Web Service
+        - App Deployed
+
+  handlers:
+    - name: Useless Handler
+      ansible.builtin.debug:
+        msg: "Nobody called me"
+
+    - name: App Deployed
+      ansible.builtin.debug:
+        msg: "App Deployed Successfully"
+
+    - name: Package Installed
+      ansible.builtin.debug:
+        msg: "Httpd package installed"
+
+    - name: Start Web Service
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: true

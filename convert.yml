@@ -1,0 +1,15 @@
+- name: Convert Ad-Hoc to Play
+  hosts: servera*
+  gather_facts: false
+  #remote_user: student
+  tasks:
+    - name: Create File
+      ansible.builtin.copy:
+        dest: /tmp/f1
+        content: "Hello EU LISA"
+      # ansible.builtin.copy: dest=/tmp/f1 content="Hello EU LISA"
+
+    - name: Install Web Package
+      ansible.builtin.dnf:
+        name: httpd
+        state: present

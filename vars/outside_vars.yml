@@ -1,0 +1,45 @@
+print_floor_level: "Level 14 Play vars_files"
+users:
+  bjones:
+    first_name: Bob
+    last_name: Jones
+    home_dir: /users/bjones
+  acook:
+    first_name: Anne
+    last_name: Cook
+    home_dir: /users/acook
+
+simple_list:
+  - thomas
+  - pierrick
+  - stephan
+  - fabrizio
+
+complex_list:
+  - fn: thomas
+    ln: cres
+  - fn: pierrick
+    ln: lauffenburger
+  - fn: stephan
+    ln: JAECK
+  - fn: fabrizio
+    ln: Fusaro
+
+os:
+  - RedHat
+  - Fedora
+  - Ubuntu
+user_dict:
+  thomas: cres
+  pierrick: lauffenburger
+  stephan: JAECK
+  fabrizio: Fusaro
+
+myvar: "youme"
+# myvar: !vault |
+#           $ANSIBLE_VAULT;1.1;AES256
+#           35323964616438356533333831363963666437336164373765333939633464663162653632373263
+#           3930366339313434643531343766623234663739316165610a663664353734633466633463343637
+#           37613039306333353036643138366431346639346461376662623938373838666234376262623733
+#           3761616266323733620a313433393666623338666233623035373031363466613561386632336565
+#           6664

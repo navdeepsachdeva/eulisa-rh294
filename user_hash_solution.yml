@@ -1,0 +1,10 @@
+- name: Create users Hash Password
+  hosts: servera*
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Create Users
+      ansible.builtin.user:
+        name: "{{ item }}"
+        password: "redhat"
+      loop: "{{ localusers }}"

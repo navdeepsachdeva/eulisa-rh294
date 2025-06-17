@@ -1,0 +1,54 @@
+- name: Setup a Web Server
+  hosts: servera*
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Collect Selected Facts Manually
+      ansible.builtin.setup:
+        gather_subset:
+          - '!all'
+          - 'min'
+          - 'network'
+          - 'hardware'
+    # List of tasks
+    - name: Install Web Package
+      ansible.builtin.dnf:
+        name: httpd
+        state: present
+
+    - name: Deploy Web app
+      ansible.builtin.copy:
+        content: |
+          Hostname      = {{ inventory_hostname }}
+          Architecture  = {{ ansible_architecture }}
+          Architecture  = {{ ansible_facts.architecture }}
+          Architecture  = {{ ansible_facts['architecture'] }}
+          Date          = {{ ansible_facts['date_time']['date'] }}
+          Time          = {{ ansible_facts.date_time.time }}
+          IP Address    = {{ ansible_facts['default_ipv4']['address'] }}
+          VDA Size      = {{ ansible_facts['devices']['vda']['size'] }}
+          FQDN          = {{ ansible_facts['fqdn'] }}
+          Hostname      = {{ ansible_facts['hostname'] }}
+          OS            = {{ ansible_distribution }} -- {{ ansible_distribution_version }}
+          Kernel        = {{ ansible_facts['kernel'] }}
+          Total Memory  = {{ ansible_facts['memory_mb']['real']['total'] }}
+          Free Memory   = {{ ansible_facts['memory_mb']['real']['free'] }}
+          Python Ver    = {{ ansible_facts['python_version'] }}
+          User Name     = {{ ansible_local.eulisa.user_info.name }}
+          Manager Name  = {{ ansible_local.eulisa.dept_info.name }}
+        dest: /var/www/html/index.html
+        mode: 0644
+
+    - name: Open Firewall Port
+      ansible.posix.firewalld:
+        service: http
+        permanent: true
+        state: enabled
+        immediate: true
+      when: ansible_distribution == "Fedora"
+
+    - name: Start Web Service
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: true

@@ -1,0 +1,22 @@
+- name: Setup a Web Server
+  hosts: servera*
+  gather_facts: false
+  tasks:
+    # List of tasks
+    - name: Install Web Package
+      ansible.builtin.dnf:
+        name: httpd
+        state: present
+
+    - name: Deploy Web app
+      ansible.builtin.copy:
+        content: "EU LISA Index Page"
+        dest: /var/www/html/index.html
+        mode: 0644
+
+
+    - name: Start Web Service
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: true

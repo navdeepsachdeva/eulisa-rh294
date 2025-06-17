@@ -1,0 +1,33 @@
+- name: Dependency Task Without Handlers/Register Demo
+  hosts: servera*
+  gather_facts: false
+  tasks:
+    # List of tasks
+    - name: Install Web Package
+      ansible.builtin.dnf:
+        name: httpd
+        state: present
+      become: true
+      
+
+    - name: Deploy Web app
+      ansible.builtin.copy:
+        content: "EU LISA Index Page"
+        dest: /var/www/html/index.html
+        mode: 0644
+      become: true
+      register: app_captured
+
+
+    - name: Print Output
+      ansible.builtin.debug:
+        msg: "{{ app_captured }}"
+
+
+    - name: Start Web Service
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: true
+      become: true
+      when: app_captured['changed'] == true

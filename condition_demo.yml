@@ -1,0 +1,32 @@
+- name: Setup a Web Server
+  hosts: servera*
+  # gather_facts: false
+  become: true
+  vars_files:
+    - vars/outside_vars.yml
+  tasks:
+    # List of tasks
+    - name: Install Web Package
+      ansible.builtin.dnf:
+        name: httpd
+        state: present
+
+    - name: Deploy Web app
+      ansible.builtin.copy:
+        content: "EU LISA Index Page"
+        dest: /var/www/html/index.html
+        mode: 0644
+      register: captured
+
+
+    - name: Start Web Service
+      ansible.builtin.service:
+        name: httpd
+        state: restarted
+        enabled: true
+      when:
+        - captured.changed == true or ansible_facts['memory_mb']['real']['free'] > 100
+        - ansible_architecture == "x86_64"
+        - meme is not defined
+        - ansible_distribution in os
+      # when: captured.changed == true and ansible_architecture == "x86_64"

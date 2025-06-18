@@ -1,0 +1,67 @@
+- name: Block Demo
+  hosts: servera*
+  gather_facts: true
+  # become: true
+  tasks:
+    - name: Outside Block Task 1
+      ansible.builtin.debug:
+        msg: "{{ inventory_hostname }}  {{ print_floor_level }}"
+
+    - name: Web Server Tasks Block
+      block:
+        - name: Install Web Package
+          ansible.builtin.dnf:
+            name: httpd
+            state: present
+          register: captured
+
+        - name: Deploy Web app
+          ansible.builtin.copy:
+            content: "EU LISA Index"
+            dest: /var/wwwWWW/html/index.html
+            mode: 0644
+
+        - name: Open Firewall Port
+          ansible.posix.firewalld:
+            service: http
+            permanent: true
+            state: enabled
+            immediate: true
+        - name: Start Web Service
+          ansible.builtin.service:
+            name: httpd
+            state: started
+            enabled: true
+      when: ansible_facts['distribution'] == "RedHat"
+      become: true
+      rescue:
+        - name: Start Undo Everything
+          ansible.builtin.debug:
+            msg: "MayDay Undo everything"
+
+        - name: Undeploy App
+          ansible.builtin.shell: rm -rf /var/www/html/*
+
+        - name: Uninstall Package
+          ansible.builtin.dnf:
+            name: httpd
+            state: absent
+            autoremove: true
+
+      always:
+        - name: EMail Stakeholders
+          ansible.builtin.debug:
+            msg: "EMail Sent Status"
+
+
+#   handlers:
+# 
+# 
+#     - name: App Deployed
+#       ansible.builtin.debug:
+#         msg: "App Deployed Successfully"
+# 
+#     - name: Package Installed
+#       ansible.builtin.debug:
+#         msg: "Httpd package installed"
+# 

@@ -1,11 +1,14 @@
 [dev]
 servera.lab.example.com
 serverb.lab.example.com print_floor_level="Level 8 inventory file"
+# WEB_LONDON ansible_host=serverb.lab.example.com print_floor_level="Level 8 inventory file"
 
 [test]
 serverc.lab.example.com
+# Database_Strasbourg ansible_host=serverc.lab.example.com
 
 [prod]
+# Database_Strasbourg ansible_host=serverd.lab.example.com
 serverd.lab.example.com
 
 [check:children]

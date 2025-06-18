@@ -1,0 +1,54 @@
+- name: Dependency Task With Handlers Demo
+  hosts: servera*
+  gather_facts: false
+  become: true
+  force_handlers: true
+  tasks:
+    - name: Install Web Package
+      ansible.builtin.dnf:
+        name: httpd
+        state: present
+      notify:
+        - Start Web Service
+        - Package Installed
+
+    - name: Deploy Web app
+      ansible.builtin.copy:
+        content: "EU LISA Index"
+        dest: /var/wwwww/html/index.html
+        mode: 0644
+      notify:
+        - Start Web Service
+        - App Deployed
+    - name: Open Firewall Port
+      ansible.posix.firewalld:
+        service: http
+        permanent: true
+        state: enabled
+        immediate: true
+      notify:
+        - port opened
+
+
+  handlers:
+    - name: Useless Handler
+      ansible.builtin.debug:
+        msg: "Nobody called me"
+
+    - name: port opened
+      ansible.builtin.debug:
+        msg: "http port opened Successfully"
+
+    - name: App Deployed
+      ansible.builtin.debug:
+        msg: "App Deployed Successfully"
+
+    - name: Package Installed
+      ansible.builtin.debug:
+        msg: "Httpd package installed"
+
+    - name: Start Web Service
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: true

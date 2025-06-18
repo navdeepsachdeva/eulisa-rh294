@@ -1,0 +1,16 @@
+---
+# handlers file for roles/security_server
+
+- name: Security packages installed
+  ansible.builtin.debug:
+    msg: "{{ security_server_package }} Successfully"
+
+- name: port opened
+  ansible.builtin.debug:
+    msg: "{{ security_server_port }} Successfully"
+
+- name: Restart Security Service
+  ansible.builtin.service:
+    name: "{{ security_server_service }}"
+    state: restarted
+    enabled: true

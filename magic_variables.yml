@@ -1,0 +1,13 @@
+- name: Magic Variables
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Task 1
+      ansible.builtin.debug:
+        msg: "Task 1 Run on {{ inventory_hostname }}"
+      when: inventory_hostname in groups["dev"]
+      # when: inventory_hostname == "serverb.lab.example.com"
+    - name: Task 2
+      ansible.builtin.debug:
+        msg: "Task 2 Run on {{ inventory_hostname }}"
+      when: inventory_hostname in groups["control"]

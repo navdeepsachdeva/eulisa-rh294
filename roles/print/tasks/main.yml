@@ -4,3 +4,8 @@
 - name: Print the Variable Level
   ansible.builtin.debug:
     msg: "{{ print_floor_level }}"
+
+- name: Small Sleep in Print
+  ansible.builtin.command: sleep 2
+  notify:
+    - print_sleep_handler

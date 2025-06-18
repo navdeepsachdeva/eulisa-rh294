@@ -1,0 +1,11 @@
+---
+# tasks file for roles/oracle_server
+
+- name: Oracle Server Task 1
+  ansible.builtin.debug:
+    msg: "Oracle Task 1 Completed"
+
+- name: Oracle Server Task 2
+  ansible.builtin.debug:
+    msg: "Oracle Task 2 Completed"
+

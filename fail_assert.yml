@@ -1,0 +1,67 @@
+- name: failed_when condition/fail module/assert module
+  hosts: servera*
+  become_user: root
+  gather_facts: false
+  remote_user: devops
+  become: true
+  tasks:
+    # List of tasks
+    - name: Update Web Package
+      ansible.builtin.dnf:
+        name: httpd
+        state: latest
+      register: captured
+      #failed_when: not captured['changed']
+    
+    # - name: fail the play via fail module
+    #   ansible.builtin.fail:
+    #     msg: "Update packages was {{ captured.changed }}"
+    #   when: not captured['changed']
+
+    - name: fail the play via assert module
+      ansible.builtin.assert:
+        that:
+          - captured['changed']
+          - pierrick_var is not defined
+        fail_msg: "Update packages was {{ captured.changed }}"
+        success_msg: "Hurray Update package is {{ captured.changed }}"
+
+    - name: Print Captured Output
+      ansible.builtin.debug:
+        var: captured
+
+    - name: Deploy Web app
+      ansible.builtin.copy:
+        content: "EU LISA Index Page"
+        dest: /var/www/html/index.html
+        mode: 0644
+
+
+    - name: Start Web Service
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: true
+
+    - name: Open Firewall Port
+      ansible.posix.firewalld:
+        service: http
+        permanent: true
+        state: enabled
+        immediate: true
+
+- name: Test Web Server
+  hosts: workstation.lab.example.com
+  gather_facts: false
+  remote_user: student
+  become: false
+  tasks:
+    - name: Check Web Page
+      ansible.builtin.uri:
+        url: http://servera.lab.example.com
+        return_content: true
+      register: captured
+
+    - name: Print the Output
+      ansible.builtin.debug:
+        msg: "{{ captured.content }}"

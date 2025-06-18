@@ -1,0 +1,58 @@
+<html>
+<head>
+<title> This is {{ inventory_hostname }} Info Page</title>
+</head>
+<body>
+
+{% for sys in groups["all"] %}
+
+{% if sys in groups["control"] %}
+	Control Node {{ hostvars[sys].ansible_facts['fqdn'] }} Information
+
+  Hostname      = {{ hostvars[sys].inventory_hostname }}
+  Architecture  = {{ hostvars[sys].ansible_facts['architecture'] }}
+  Date          = {{ hostvars[sys].ansible_facts['date_time']['date'] }}
+  Time          = {{ hostvars[sys].ansible_facts.date_time.time }}
+  IP Address    = {{ hostvars[sys].ansible_facts['default_ipv4']['address'] }}
+  VDA Size      = {{ hostvars[sys].ansible_facts['devices']['vda']['size'] }}
+  FQDN          = {{ hostvars[sys].ansible_facts['fqdn'] }}
+  Hostname      = {{ hostvars[sys].ansible_facts['hostname'] }}
+  OS            = {{ hostvars[sys].ansible_distribution }} -- {{ ansible_distribution_version }}
+  Kernel        = {{ hostvars[sys].ansible_facts['kernel'] }}
+  Total Memory  = {{ hostvars[sys].ansible_facts['memory_mb']['real']['total'] }}
+  Free Memory   = {{ hostvars[sys].ansible_facts['memory_mb']['real']['free'] }}
+  Python Ver    = {{ hostvars[sys].ansible_facts['python_version'] }}
+  User Name     = {{ hostvars[sys].ansible_local.eulisa.user_info.name | default('Not Available') }}
+  Manager Name  = {{ hostvars[sys].ansible_local.eulisa.dept_info.name | default('Not Available') }}
+  My Groups	= {{ hostvars[sys].mygroups }}
+
+{% endif %}
+
+{% if sys not in groups["control"] %}
+	Managed Host {{ hostvars[sys].ansible_facts['fqdn'] }} Information
+
+  Current Var	= {{ sys }}	
+  Hostname      = {{ hostvars[sys].inventory_hostname }}
+  Architecture  = {{ hostvars[sys].ansible_architecture }}
+  Architecture  = {{ hostvars[sys].ansible_facts.architecture }}
+  Architecture  = {{ hostvars[sys].ansible_facts['architecture'] }}
+  Date          = {{ hostvars[sys].ansible_facts['date_time']['date'] }}
+  Time          = {{ hostvars[sys].ansible_facts.date_time.time }}
+  IP Address    = {{ hostvars[sys].ansible_facts['default_ipv4']['address'] }}
+  VDA Size      = {{ hostvars[sys].ansible_facts['devices']['vda']['size'] }}
+  FQDN          = {{ hostvars[sys].ansible_facts['fqdn'] }}
+  Hostname      = {{ hostvars[sys].ansible_facts['hostname'] }}
+  OS            = {{ hostvars[sys].ansible_distribution }} -- {{ ansible_distribution_version }}
+  Kernel        = {{ hostvars[sys].ansible_facts['kernel'] }}
+  Total Memory  = {{ hostvars[sys].ansible_facts['memory_mb']['real']['total'] }}
+  Free Memory   = {{ hostvars[sys].ansible_facts['memory_mb']['real']['free'] }}
+  Python Ver    = {{ hostvars[sys].ansible_facts['python_version'] }}
+  User Name     = {{ hostvars[sys].ansible_local.eulisa.user_info.name | default('Not Available') }}
+  Manager Name  = {{ hostvars[sys].ansible_local.eulisa.dept_info.name | default('Not Available') }}
+  My Groups	= {{ hostvars[sys].mygroups }}
+
+
+{% endif %}
+{% endfor %}
+</body>
+</html>

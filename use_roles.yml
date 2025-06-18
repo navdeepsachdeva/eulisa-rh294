@@ -1,0 +1,64 @@
+- name: Roles Demo
+  hosts: servera*
+  gather_facts: true
+
+  pre_tasks:
+    - name: PRE_TASKS -- fail the play via assert module
+      ansible.builtin.assert:
+        that:
+          - ansible_facts['memory_mb']['real']['free'] > 300
+          - ansible_architecture == "x86_64"
+        fail_msg: "Not Enough Resources Memory={{ ansible_facts['memory_mb']['real']['free'] }} Architecture = {{ ansible_architecture }}"
+        success_msg: "Good to GO {{ ansible_facts['memory_mb']['real']['free'] }} Architecture = {{ ansible_architecture }}"
+
+    - name: PRE_TASKS -- Notify Customer to Before Start
+      ansible.builtin.command: sleep 2
+      notify:
+        - PRE_TASKS_service_down
+
+  post_tasks:
+    - name: POST_TASKS -- Check Web Page
+      ansible.builtin.uri:
+        url: http://servera.lab.example.com
+        return_content: true
+      register: captured
+ 
+    - name: POST_TASKS -- Print the Output
+      ansible.builtin.debug:
+        msg: "{{ captured.content }}"
+
+    - name: POST_TASKS -- Notify Customer to After Completion
+      ansible.builtin.command: sleep 2
+      notify:
+        - POST_TASKS_service_up
+
+  tasks:
+    - name: Import/Include a Role
+      ansible.builtin.include_role:
+      # ansible.builtin.import_role:
+        name: oracle_server
+      when: some_var is defined
+
+    - name: extra task in play
+      ansible.builtin.command: sleep 2
+      notify:
+        - extra_handler
+
+  handlers:
+    - name: extra_handler
+      ansible.builtin.debug:
+        msg: "Extra Handler also executed"
+
+    - name: POST_TASKS_service_up
+      ansible.builtin.debug:
+        msg: "Instagram Up Start wasting time"
+
+    - name: PRE_TASKS_service_down
+      ansible.builtin.debug:
+        msg: "Instagram Down Sleep NOW"
+
+  roles:
+    - role: web_server
+      become: true
+      web_server_content: "Play Level"
+

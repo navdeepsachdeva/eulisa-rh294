@@ -1,4 +1,5 @@
 - name: Setup a Web Server
+  # hosts: check,prod
   hosts: servera*
   gather_facts: false
   become: true

@@ -1,2 +1,6 @@
 ---
 # handlers file for roles/print
+
+- name: print_sleep_handler
+  ansible.builtin.debug:
+    msg: "Enough sleep before print"

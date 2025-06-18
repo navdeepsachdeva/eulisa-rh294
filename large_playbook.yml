@@ -1,0 +1,27 @@
+- name: Import an External Template Playbook
+  ansible.builtin.import_playbook: template_demo.yml
+
+- name: Integration Playbook
+  hosts: servera*
+  gather_facts: false
+  tasks:
+    - name: Import/static/pre-process a Task File
+      ansible.builtin.import_tasks:
+        file: tasks/external_tasks_oracle.yml
+      when: wewe is not defined
+
+    - name: Include/Dynamic/Runtime a Task File
+      ansible.builtin.include_tasks:
+        file: tasks/external_tasks_ldap.yml
+      when: wewe is not defined
+
+    # - name: Loop Around mutiple Task Files
+    #   # ansible.builtin.import_tasks:
+    #   ansible.builtin.include_tasks:
+    #     file: "{{ item }}"
+    #   loop:
+    #     - tasks/external_tasks_oracle.yml
+    #     - tasks/external_tasks_ldap.yml
+
+- name: Import an multiple_play Playbook
+  ansible.builtin.import_playbook: multiple_play.yml

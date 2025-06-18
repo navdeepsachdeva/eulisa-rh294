@@ -1,0 +1,36 @@
+- name: Ignore Errors Demo
+  hosts: servera*
+  gather_facts: false
+  become: true
+  # ignore_errors: true
+  tasks:
+    - name: Check Web Page
+      ansible.builtin.uri:
+        url: http://servera.lab.example.com
+        return_content: true
+      ignore_errors: true
+
+    - name: Open Firewall Port
+      ansible.posix.firewalld:
+        service: http
+        permanent: true
+        state: enabled
+        immediate: true
+
+    - name: Install Web Package
+      ansible.builtin.dnf:
+        name: httpd
+        state: present
+
+    - name: Deploy Web app
+      ansible.builtin.copy:
+        content: "EU LISA Index Page"
+        dest: /var/www/html/index.html
+        mode: 0644
+
+
+    - name: Start Web Service
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: true

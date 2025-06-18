@@ -1,5 +1,5 @@
 - name: Convert Ad-Hoc to Play
-  hosts: servera*
+  hosts: all
   gather_facts: false
   #remote_user: student
   tasks:

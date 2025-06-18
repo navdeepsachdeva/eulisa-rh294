@@ -1,0 +1,26 @@
+<html>
+<head>
+<title> This is {{ inventory_hostname }} Info Page</title>
+</head>
+<body>
+	This is System Information for {{ ansible_facts['fqdn'] }}
+
+          Hostname      = {{ inventory_hostname }}
+          Architecture  = {{ ansible_architecture }}
+          Architecture  = {{ ansible_facts.architecture }}
+          Architecture  = {{ ansible_facts['architecture'] }}
+          Date          = {{ ansible_facts['date_time']['date'] }}
+          Time          = {{ ansible_facts.date_time.time }}
+          IP Address    = {{ ansible_facts['default_ipv4']['address'] }}
+          VDA Size      = {{ ansible_facts['devices']['vda']['size'] }}
+          FQDN          = {{ ansible_facts['fqdn'] }}
+          Hostname      = {{ ansible_facts['hostname'] }}
+          OS            = {{ ansible_distribution }} -- {{ ansible_distribution_version }}
+          Kernel        = {{ ansible_facts['kernel'] }}
+          Total Memory  = {{ ansible_facts['memory_mb']['real']['total'] }}
+          Free Memory   = {{ ansible_facts['memory_mb']['real']['free'] }}
+          Python Ver    = {{ ansible_facts['python_version'] }}
+          User Name     = {{ ansible_local.eulisa.user_info.name | default('Not Available') }}
+          Manager Name  = {{ ansible_local.eulisa.dept_info.name | default('Not Available') }}
+</body>
+</html>

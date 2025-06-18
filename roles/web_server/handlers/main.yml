@@ -1,0 +1,20 @@
+---
+# handlers file for web_server
+
+- name: App Deployed
+  ansible.builtin.debug:
+    msg: "App Deployed Successfully"
+
+- name: Package Installed
+  ansible.builtin.debug:
+    msg: "Httpd package installed"
+
+- name: Start Web Service
+  ansible.builtin.service:
+    name: "{{ web_server_service }}"
+    state: restarted
+    enabled: true
+
+- name: Hardware Info Deployed
+  ansible.builtin.debug:
+    msg: "Info for {{ inventory_hostname }} collected Successfully"

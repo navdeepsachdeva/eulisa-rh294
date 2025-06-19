@@ -1,0 +1,35 @@
+- name: Install the required packages on the web server
+  hosts: servera.lab.example.com
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Install the packages Good Way
+      ansible.builtin.dnf:
+        name:
+          - httpd
+          - vsftpd
+        state: present
+
+    - name: Install the packages Another Good Way
+      ansible.builtin.dnf:
+        name: "{{ mypackages }}"
+        state: present
+      vars:
+        mypackages:
+          - httpd
+          - vsftpd
+    - name: Install the packages Bad Way
+      ansible.builtin.dnf:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - httpd
+        - vsftpd
+
+    - name:  Start Services ONLY Way
+      ansible.builtin.service:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - httpd
+        - vsftpd

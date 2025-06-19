@@ -1,0 +1,40 @@
+- name: Verbosity/Register Demo
+  hosts: servera*
+  gather_facts: false
+  tasks:
+    # List of tasks
+    - name: Install Web Package
+      ansible.builtin.dnf:
+        name: httpd
+        state: present
+      register: install_captured
+      become: true
+      
+    - name: Print Install Output
+      ansible.builtin.debug:
+        # msg: "{{ install_captured }}"
+        var: install_captured
+        verbosity: 2
+
+    - name: Deploy Web app
+      ansible.builtin.copy:
+        content: "EU LISA Index Page"
+        dest: /var/www/html/index.html
+        mode: 0644
+      become: true
+      register: app_captured
+
+
+    - name: Print App Output
+      ansible.builtin.debug:
+        msg: "{{ app_captured }}"
+        verbosity: 3
+
+
+    - name: Start Web Service
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: true
+      become: true
+      when: app_captured['changed'] == true

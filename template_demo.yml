@@ -7,7 +7,7 @@
       ansible.builtin.set_fact:
         mygroups: "{{ group_names }}"
 
-    - name: Blokc to Collect Info
+    - name: Block to Collect Info
       block:
         - name: Install Web Package
           ansible.builtin.dnf:

@@ -1,0 +1,12 @@
+- name: Template App of Web Server
+  hosts: servera*
+  # gather_facts: false
+  tasks:
+    - name: Deploy Web app
+      ansible.builtin.template:
+        src: j2/simple.j2
+        dest: /tmp/index.html
+        mode: 0644
+
+# ansible-navigator run diff_template.yml --check
+# ansible-navigator run diff_template.yml --check  --diff

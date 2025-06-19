@@ -1,0 +1,23 @@
+- name: Use External
+  hosts: servera*
+  gather_facts: false
+  vars:
+    timesync_ntp_servers:
+      - hostname: foo.example.com
+        iburst: yes
+      - hostname: bar.example.com
+        iburst: yes
+      - hostname: baz.example.com
+        iburst: yes
+
+  roles:
+    - role: redhat.rhel_system_roles.timesync
+    # - role: cisco.catalystwan.health_checks
+
+    #- role: cisco.catalystwan.health_checks
+    #
+  tasks:
+    - name: Retrieve all alarms
+      #alarms:
+      cisco.catalystwan.alarms:
+        from_time: 16

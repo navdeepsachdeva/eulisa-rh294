@@ -1,0 +1,26 @@
+- name: Check Mode Web Server
+  hosts: servera*
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Install Web Package
+      ansible.builtin.dnf:
+        name: httpd
+        state: present
+      check_mode: false
+
+    - name: Deploy Web app
+      ansible.builtin.copy:
+        content: "EU LISA Index Page"
+        dest: /var/www/html/index.html
+        mode: 0644
+      # check_mode: true
+      # cheeeck_mode is true by default
+
+
+    - name: Start Web Service
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: true
+      check_mode: true

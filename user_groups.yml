@@ -1,0 +1,21 @@
+- name: User Groups
+  hosts: servera*
+  gather_facts: false
+  become: true
+  vars_files:
+    - vars/outside_vars.yml
+
+  tasks:
+    - name: Create a Group Developers
+      ansible.builtin.group:
+        name: developers
+        state: present
+
+    - name: Add Users in group
+      ansible.builtin.user:
+        name: "{{ item }}"
+        password: "{{ 'redhat' | password_hash }}"
+        state: present
+        groups: developers
+      loop: "{{ simple_list }}"
+      

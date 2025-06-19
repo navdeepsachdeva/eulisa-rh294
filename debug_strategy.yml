@@ -1,0 +1,46 @@
+- name: Setup a Web Server
+  hosts: servera*
+  gather_facts: false
+  strategy: debug
+  tasks:
+    - name: Sleep Task 1
+      ansible.builtin.command: sleep 2
+      register: captured
+
+    - name: Print Task 2
+      ansible.builtin.debug:
+        var: captured
+
+    - name: Install Web Package Task 21
+      ansible.builtin.dnf:
+        name: httpddd
+        state: present
+      become: true
+      # task.args
+      # task.args['name']='httpd'
+      # task.args
+      # redo
+
+    - name: Deploy Web app Task 22
+      ansible.builtin.copy:
+        content: "EU LISA Index Page {{ captured.failed }}"
+        dest: /var/wwwwww/html/index.html
+        mode: 0644
+      become: true
+      # task.args
+      # task.args['dest']="/var/www/html/index.html"
+      # task.args
+
+
+    - name: Start Web Service Task 23
+      ansible.builtin.service:
+        name: httpddddd
+        stateeeee: started
+        enabled: true
+      become: true
+      # task.args
+      # task.args['name']="httpd"
+      # task.args['state']="started"
+      # del(task.args['stateeeee'])
+      # task.args
+      # redo
